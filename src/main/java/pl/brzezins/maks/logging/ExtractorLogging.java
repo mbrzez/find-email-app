@@ -1,4 +1,4 @@
-package pl.brzezins.maks.callable;
+package pl.brzezins.maks.logging;
 
 public abstract class ExtractorLogging {
     protected String getThreadDetails() {

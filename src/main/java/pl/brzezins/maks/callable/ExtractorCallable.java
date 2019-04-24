@@ -1,7 +1,8 @@
 package pl.brzezins.maks.callable;
 
 import pl.brzezins.maks.extractor.FileExtractor;
-import pl.brzezins.maks.extractor.FileExtractorFactory;
+import pl.brzezins.maks.factory.FileExtractorFactory;
+import pl.brzezins.maks.logging.ExtractorLogging;
 
 import java.io.File;
 import java.util.Collections;
