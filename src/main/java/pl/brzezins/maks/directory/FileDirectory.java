@@ -32,7 +32,7 @@ public class FileDirectory {
         return null;
     }
 
-    public List<String> getAllFiles() {
+    public List<String> getAllFilesAsString() {
         List<Path> allFilesPath = getAllFilesPath();
 
         return allFilesPath.stream().map((p) -> p.toString()).collect(Collectors.toList());

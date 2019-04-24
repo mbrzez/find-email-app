@@ -1,9 +1,11 @@
 package pl.brzezins.maks.app;
 
 import pl.brzezins.maks.directory.FileDirectory;
-import pl.brzezins.maks.extractor.ContentExtractor;
+import pl.brzezins.maks.callable.ExtractorCallable;
 import pl.brzezins.maks.helpers.ApplicationParams;
 
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -13,44 +15,40 @@ public class Application {
 
     public static final int NUMBER_OF_THREADS = 4;
 
-    public static void main(String[] args){
-        String path = ApplicationParams.getPathFromArgs(args);
+    public static void main(String[] args) {
+        String sourceDirectory = ApplicationParams.getPathFromArgs(args);
 
-        if (path == null) return;
+        if (sourceDirectory == null) return;
 
-        FileDirectory fileDirectory = new FileDirectory(path);
-        List<String> files = fileDirectory.getAllFiles();
-
-        BlockingQueue<String> blockingQueue = new LinkedBlockingQueue<>(files);
+        FileDirectory fileDirectory = new FileDirectory(sourceDirectory);
+        List<Path> paths = fileDirectory.getAllFilesPath();
 
         System.out.println("Starting multi-thread processing");
 
-        // Alternative
-        // ExecutorService executor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
-        //
-        // for (int i = 0; i < NUMBER_OF_THREADS; i++) {
-        //    executor.execute(new ContentExtractor(blockingQueue));
-        // }
-        //
-        // executor.shutdown();
+        List<Future<List<String>>> futures = new ArrayList<>();
+        ExecutorService executorService = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
-        Queue<Thread> threadQueue = new LinkedList<>();
-
-        for (int i = 0; i < NUMBER_OF_THREADS; i++) {
-            Runnable runnable = new ContentExtractor(blockingQueue);
-            Thread thread = new Thread(runnable);
-
-            threadQueue.add(thread);
-            thread.start();
+        for (Path path : paths) {
+            Future<List<String>> future = executorService.submit(new ExtractorCallable(path.toFile()));
+            futures.add(future);
         }
 
-        while (threadQueue.peek() != null) {
+        List<String> emailAddresses = new ArrayList<>();
+
+        for (Future<List<String>> future : futures) {
             try {
-                threadQueue.poll().join();
-            } catch (InterruptedException e) {
+                emailAddresses.addAll(future.get());
+            } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
         }
+
+        for (String email : emailAddresses) {
+            System.out.println("Email address: " + email);
+        }
+
+
+        executorService.shutdown();
 
         System.out.println("All threads finished their work");
     }
