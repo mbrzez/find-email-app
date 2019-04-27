@@ -1,9 +1,6 @@
 package pl.brzezins.maks.factory;
 
-import pl.brzezins.maks.extractor.FileExtractor;
-import pl.brzezins.maks.extractor.PdfFileExtractor;
-import pl.brzezins.maks.extractor.TextFileExtractor;
-import pl.brzezins.maks.extractor.WordFileExtractor;
+import pl.brzezins.maks.extractor.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,16 +16,17 @@ public class FileExtractorFactory {
             case "pdf":
                 return new PdfFileExtractor();
             case "doc":
+                return new DocFileExtractor();
             case "docx":
-                return new WordFileExtractor();
+                return new DocxFileExtractor();
             case "txt":
             default:
                 if (isTextFile(file)) {
                     return new TextFileExtractor();
                 }
-
-                return null;
         }
+
+        return new UnknownFileExtractor();
     }
 
     private static String getExtension(File file) {

@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 public class Application {
 
@@ -45,10 +46,11 @@ public class Application {
 
         executorService.shutdown();
 
-        for (String email : emailAddresses) {
+        List<String> uniqueAddresses = emailAddresses.stream().distinct().collect(Collectors.toList());
+
+        for (String email : uniqueAddresses) {
             System.out.println("Email address: " + email);
         }
-
 
         System.out.println("All threads finished their work");
     }

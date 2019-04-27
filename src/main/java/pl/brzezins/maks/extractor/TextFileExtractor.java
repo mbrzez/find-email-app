@@ -4,6 +4,7 @@ import pl.brzezins.maks.regex.EmailRegex;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -21,8 +22,7 @@ public class TextFileExtractor implements FileExtractor {
             }
 
             return results;
-
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
