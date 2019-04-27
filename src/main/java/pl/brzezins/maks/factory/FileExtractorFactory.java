@@ -6,31 +6,49 @@ import pl.brzezins.maks.extractor.TextFileExtractor;
 import pl.brzezins.maks.extractor.WordFileExtractor;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 public class FileExtractorFactory {
     private FileExtractorFactory() {}
 
     public static FileExtractor create(File file) {
-        if (isPdfFile(file)) {
-            return new PdfFileExtractor();
-        } else if (isWordFile(file)) {
-            return new WordFileExtractor();
-        } else if (isTextFile(file)) {
-            return new TextFileExtractor();
+        String extension = getExtension(file);
+
+        switch (extension) {
+            case "pdf":
+                return new PdfFileExtractor();
+            case "doc":
+            case "docx":
+                return new WordFileExtractor();
+            case "txt":
+            default:
+                if (isTextFile(file)) {
+                    return new TextFileExtractor();
+                }
+
+                return null;
         }
-
-        return null;
     }
 
-    private static boolean isPdfFile(File file) {
-        return false;
-    }
+    private static String getExtension(File file) {
+        String fileName = file.getName();
+        String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
 
-    private static boolean isWordFile(File file) {
-        return false;
+        return extension;
     }
 
     private static boolean isTextFile(File file) {
+        try {
+            String mimeType = Files.probeContentType(file.toPath());
+
+            if (mimeType != null && mimeType.contains("text")) {
+                return true;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return false;
     }
 }

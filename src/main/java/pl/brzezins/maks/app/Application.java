@@ -43,12 +43,12 @@ public class Application {
             }
         }
 
+        executorService.shutdown();
+
         for (String email : emailAddresses) {
             System.out.println("Email address: " + email);
         }
 
-
-        executorService.shutdown();
 
         System.out.println("All threads finished their work");
     }
