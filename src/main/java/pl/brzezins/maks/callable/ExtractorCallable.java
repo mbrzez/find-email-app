@@ -19,6 +19,7 @@ public class ExtractorCallable extends ExtractorLogging implements Callable<List
 
     public List<String> call() {
         //System.out.println(this.getThreadDetails("started!"));
+        System.out.println(this.getThreadDetails(file.toString()));
 
         FileExtractor fileExtractor = FileExtractorFactory.create(file);
 
