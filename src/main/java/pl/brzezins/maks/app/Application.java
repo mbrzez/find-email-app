@@ -2,13 +2,14 @@ package pl.brzezins.maks.app;
 
 import pl.brzezins.maks.directory.FileDirectory;
 import pl.brzezins.maks.callable.ExtractorCallable;
+import pl.brzezins.maks.factory.FileExtractorFactory;
 import pl.brzezins.maks.helpers.ApplicationParams;
+import pl.brzezins.maks.utils.FileWrapper;
+import pl.brzezins.maks.writter.FileResultWriter;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
@@ -17,20 +18,24 @@ public class Application {
     public static final int NUMBER_OF_THREADS = 4;
 
     public static void main(String[] args) {
-        String sourceDirectory = ApplicationParams.getPathFromArgs(args);
+        String sourcePath = ApplicationParams.getSourceDirectory(args);
+        String destinationFilename = ApplicationParams.getOutputDirectory(args);
 
-        if (sourceDirectory == null) return;
+        if (sourcePath == null || destinationFilename == null) {
+            System.out.println("Please provide -d and -o params");
+            return;
+        }
 
-        FileDirectory fileDirectory = new FileDirectory(sourceDirectory);
+        FileDirectory fileDirectory = new FileDirectory(sourcePath);
         List<Path> paths = fileDirectory.getAllFilesPath();
-
-        System.out.println("Starting multi-thread processing");
 
         List<Future<List<String>>> futures = new ArrayList<>();
         ExecutorService executorService = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
         for (Path path : paths) {
-            Future<List<String>> future = executorService.submit(new ExtractorCallable(path.toFile()));
+            FileWrapper wrapper = new FileWrapper(path.toFile());
+            FileExtractorFactory factory = new FileExtractorFactory(wrapper);
+            Future<List<String>> future = executorService.submit(new ExtractorCallable(wrapper, factory.create()));
             futures.add(future);
         }
 
@@ -46,12 +51,6 @@ public class Application {
 
         executorService.shutdown();
 
-        List<String> uniqueAddresses = emailAddresses.stream().distinct().collect(Collectors.toList());
-
-        for (String email : uniqueAddresses) {
-            System.out.println("Email address: " + email);
-        }
-
-        System.out.println("All threads finished their work");
+        FileResultWriter.writeToFile(destinationFilename, emailAddresses);
     }
 }

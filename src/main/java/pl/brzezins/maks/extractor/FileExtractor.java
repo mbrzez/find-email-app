@@ -1,8 +1,9 @@
 package pl.brzezins.maks.extractor;
 
-import java.io.File;
+import pl.brzezins.maks.utils.FileWrapper;
+
 import java.util.List;
 
 public interface FileExtractor {
-    List<String> extract(File file);
+    List<String> extract(FileWrapper fileWrapper);
 }

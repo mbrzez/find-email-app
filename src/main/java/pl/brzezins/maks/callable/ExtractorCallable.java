@@ -1,36 +1,27 @@
 package pl.brzezins.maks.callable;
 
 import pl.brzezins.maks.extractor.FileExtractor;
-import pl.brzezins.maks.factory.FileExtractorFactory;
 import pl.brzezins.maks.logging.ExtractorLogging;
+import pl.brzezins.maks.utils.FileWrapper;
 
-import java.io.File;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 
 public class ExtractorCallable extends ExtractorLogging implements Callable<List<String>> {
+    private FileWrapper fileWrapper;
+    private FileExtractor fileExtractor;
 
-    private File file;
-
-    public ExtractorCallable(File file) {
-        this.file = file;
+    public ExtractorCallable(FileWrapper fileStreamer, FileExtractor fileExtractor) {
+        this.fileWrapper = fileStreamer;
+        this.fileExtractor = fileExtractor;
     }
 
     public List<String> call() {
-        //System.out.println(this.getThreadDetails("started!"));
-        System.out.println(this.getThreadDetails(file.toString()));
-
-        FileExtractor fileExtractor = FileExtractorFactory.create(file);
-
         if (fileExtractor == null) {
             return Collections.emptyList();
         }
 
-        List<String> result =  fileExtractor.extract(file);
-
-        //System.out.println(this.getThreadDetails("finished!"));
-
-        return result;
+        return fileExtractor.extract(fileWrapper);
     }
 }

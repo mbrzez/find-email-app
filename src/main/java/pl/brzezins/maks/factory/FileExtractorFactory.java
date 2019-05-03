@@ -1,52 +1,32 @@
 package pl.brzezins.maks.factory;
 
 import pl.brzezins.maks.extractor.*;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
+import pl.brzezins.maks.utils.FileWrapper;
 
 public class FileExtractorFactory {
-    private FileExtractorFactory() {}
+    private FileWrapper fileWrapper;
 
-    public static FileExtractor create(File file) {
-        String extension = getExtension(file);
+    public FileExtractorFactory(FileWrapper fileWrapper) {
+        this.fileWrapper = fileWrapper;
+    }
+
+    public FileExtractor create() {
+        String extension = fileWrapper.getExtension();
 
         switch (extension) {
-            case "pdf":
-                return new PdfFileExtractor();
             case "doc":
                 return new DocFileExtractor();
             case "docx":
                 return new DocxFileExtractor();
+            case "pdf":
+                return new PdfFileExtractor();
             case "txt":
             default:
-                if (isTextFile(file)) {
+                if (fileWrapper.isTextFile()) {
                     return new TextFileExtractor();
                 }
         }
 
         return new UnknownFileExtractor();
-    }
-
-    private static String getExtension(File file) {
-        String fileName = file.getName();
-        String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
-
-        return extension;
-    }
-
-    private static boolean isTextFile(File file) {
-        try {
-            String mimeType = Files.probeContentType(file.toPath());
-
-            if (mimeType != null && mimeType.contains("text")) {
-                return true;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return false;
     }
 }
