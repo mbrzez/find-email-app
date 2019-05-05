@@ -3,7 +3,8 @@ package pl.brzezins.maks.extractor;
 import pl.brzezins.maks.regex.EmailRegex;
 import pl.brzezins.maks.utils.FileWrapper;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

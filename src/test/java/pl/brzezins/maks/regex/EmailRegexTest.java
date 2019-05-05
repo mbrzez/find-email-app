@@ -1,27 +1,17 @@
 package pl.brzezins.maks.regex;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class EmailRegexTest {
-
-    @ParameterizedTest
-    @MethodSource("provideArgumentsForEmailRegex")
-    void match(String input, List<String> expected) {
-        List<String> result = EmailRegex.match(input);
-
-        assertEquals(expected, result);
-    }
 
     private static Stream<Arguments> provideArgumentsForEmailRegex() {
         return Stream.of(
@@ -31,5 +21,13 @@ class EmailRegexTest {
                 Arguments.of("info@domain.com is my email. Please contact to get more details",
                         Arrays.asList("info@domain.com"))
         );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideArgumentsForEmailRegex")
+    void match(String input, List<String> expected) {
+        List<String> result = EmailRegex.match(input);
+
+        assertEquals(expected, result);
     }
 }

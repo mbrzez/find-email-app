@@ -1,13 +1,14 @@
 package pl.brzezins.maks.extractor;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Collections;
-import java.util.List;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import pl.brzezins.maks.regex.EmailRegex;
 import pl.brzezins.maks.utils.FileWrapper;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Collections;
+import java.util.List;
 
 public class DocxFileExtractor implements FileExtractor {
     @Override

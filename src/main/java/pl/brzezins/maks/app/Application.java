@@ -1,7 +1,7 @@
 package pl.brzezins.maks.app;
 
-import pl.brzezins.maks.directory.FileDirectory;
 import pl.brzezins.maks.callable.ExtractorCallable;
+import pl.brzezins.maks.directory.FileDirectory;
 import pl.brzezins.maks.factory.FileExtractorFactory;
 import pl.brzezins.maks.helpers.ApplicationParams;
 import pl.brzezins.maks.utils.FileWrapper;
@@ -10,8 +10,10 @@ import pl.brzezins.maks.writter.FileResultWriter;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.*;
-import java.util.stream.Collectors;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class Application {
 

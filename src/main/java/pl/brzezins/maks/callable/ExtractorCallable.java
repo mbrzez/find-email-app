@@ -1,14 +1,13 @@
 package pl.brzezins.maks.callable;
 
 import pl.brzezins.maks.extractor.FileExtractor;
-import pl.brzezins.maks.logging.ExtractorLogging;
 import pl.brzezins.maks.utils.FileWrapper;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-public class ExtractorCallable extends ExtractorLogging implements Callable<List<String>> {
+public class ExtractorCallable implements Callable<List<String>> {
     private FileWrapper fileWrapper;
     private FileExtractor fileExtractor;
 

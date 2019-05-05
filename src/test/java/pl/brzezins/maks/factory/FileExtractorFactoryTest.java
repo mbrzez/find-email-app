@@ -12,7 +12,7 @@ import pl.brzezins.maks.utils.FileWrapper;
 
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.lenient;
 
 @ExtendWith(MockitoExtension.class)
@@ -23,17 +23,6 @@ class FileExtractorFactoryTest {
     @InjectMocks
     FileExtractorFactory factory;
 
-    @ParameterizedTest
-    @MethodSource("provideArgumentsForFactory")
-    void factoryProducesCorrectFileExtractor(String extension, boolean textFile, Class clazz) {
-        lenient().when(fileWrapper.getExtension()).thenReturn(extension);
-        lenient().when(fileWrapper.isTextFile()).thenReturn(textFile);
-
-        FileExtractor extractor = factory.create();
-
-        assertEquals(extractor.getClass(), clazz);
-    }
-
     private static Stream<Arguments> provideArgumentsForFactory() {
         return Stream.of(
                 Arguments.of("doc", false, DocFileExtractor.class),
@@ -43,5 +32,16 @@ class FileExtractorFactoryTest {
                 Arguments.of("txt", false, UnknownFileExtractor.class),
                 Arguments.of("img", false, UnknownFileExtractor.class)
         );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideArgumentsForFactory")
+    void factoryProducesCorrectFileExtractor(String extension, boolean textFile, Class clazz) {
+        lenient().when(fileWrapper.getExtension()).thenReturn(extension);
+        lenient().when(fileWrapper.isTextFile()).thenReturn(textFile);
+
+        FileExtractor extractor = factory.create();
+
+        assertEquals(extractor.getClass(), clazz);
     }
 }
