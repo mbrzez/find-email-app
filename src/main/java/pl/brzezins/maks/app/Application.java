@@ -25,6 +25,7 @@ public class Application {
 
         if (sourcePath == null || destinationFilename == null) {
             System.out.println("Please provide -d and -o params");
+            System.out.println("Example: java find-email-app.jar -d C:\\directory -o C:\\result.txt");
             return;
         }
 
