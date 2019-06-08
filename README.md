@@ -14,4 +14,4 @@ Input and output directories must be provided to run the application.
 ```
 java -jar find-email-app.jar -i <input> -o <output>
 ```
-E-mail list will be generated in the output directory
+An e-mail list will be generated in the output directory
