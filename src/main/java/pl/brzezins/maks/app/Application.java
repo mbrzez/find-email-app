@@ -20,12 +20,11 @@ public class Application {
     public static final int NUMBER_OF_THREADS = 4;
 
     public static void main(String[] args) {
-        String sourcePath = ApplicationParams.getSourceDirectory(args);
+        String sourcePath = ApplicationParams.getInputDirectory(args);
         String destinationFilename = ApplicationParams.getOutputDirectory(args);
 
         if (sourcePath == null || destinationFilename == null) {
-            System.out.println("Please provide -d and -o params");
-            System.out.println("Example: java find-email-app.jar -d C:\\directory -o C:\\result.txt");
+            System.out.println("Please provide -i and -o params");
             return;
         }
 

@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ApplicationParams {
-    public static String getSourceDirectory(String[] args) {
-        return getArgValue(args, "-d");
+    public static String getInputDirectory(String[] args) {
+        return getArgValue(args, "-i");
     }
 
     public static String getOutputDirectory(String[] args) {
